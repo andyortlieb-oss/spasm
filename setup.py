@@ -1,19 +1,17 @@
 from setuptools import setup
 
 setup(
-    name='{{ package_name }}',
-    version='{{ package_version }}',
-    packages=('{{ package_dir_name }}',),
-    url='https://github.com/{{ github_user }}/{{ repo_name }}',
+    name='spasm',
+    version='0.0.1',
+    packages=('spasm',),
+    url='https://github.com/andyortlieb/spasm',
     license='MIT',
-    author='{{ author_name }}',
-    author_email='{{ author_email }}',
-    install_requires=(
-        {{ install_requires|pytuple }}),
-    tests_require=(
-        {{ tests_require|pytuple }}),
+    author='Andy Ortlieb & TJ Kells',
+    author_email='Andy Ortlieb <andyortlieb@gmail.com>',
+    install_requires=(),
+    tests_require=(),
     description=(
-        {{ short_description|pystring }}),
+        'SPASM - Spasm Passes As a StateMachine'),
     classifiers=(
         'License :: OSI Approved :: MIT License',
         'Programming Language :: Python :: 2',

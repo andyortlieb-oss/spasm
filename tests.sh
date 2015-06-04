@@ -2,7 +2,7 @@
 
 set -e -o pipefail
 
-readonly PACKAGE_DIR="{{ package_dir_name }}"
+readonly PACKAGE_DIR="spasm"
 
 function each_iname {
     local iname=${1}; shift
