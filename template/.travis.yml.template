@@ -1,0 +1,24 @@
+language: python
+env:
+  - TOXENV=py26
+  - TOXENV=py27
+  - TOXENV=py32
+  - TOXENV=py33
+  - TOXENV=py34
+  - TOXENV=pypy
+  - TOXENV=pypy3
+install:
+  - pip install tox coveralls
+script:
+  - tox
+after_success:
+  - coveralls
+deploy:
+  provider: pypi
+  user: {{ github_user }}
+  distributions: sdist bdist_wheel
+  on:
+    condition: $TOXENV == py27
+    tags: true
+    all_branches: true
+    repo: {{ github_user }}/{{ repo_name }}
