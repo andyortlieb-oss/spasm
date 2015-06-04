@@ -1,24 +1,26 @@
 language: python
 env:
-  - TOXENV=py26
-  - TOXENV=py27
-  - TOXENV=py32
-  - TOXENV=py33
-  - TOXENV=py34
-  - TOXENV=pypy
-  - TOXENV=pypy3
+- TOXENV=py26
+- TOXENV=py27
+- TOXENV=py32
+- TOXENV=py33
+- TOXENV=py34
+- TOXENV=pypy
+- TOXENV=pypy3
 install:
-  - pip install tox coveralls
+- pip install tox coveralls
 script:
-  - tox
+- tox
 after_success:
-  - coveralls
+- coveralls
 deploy:
   provider: pypi
-  user: andyortlieb
+  user: systemsoverload
   distributions: sdist bdist_wheel
   on:
-    condition: $TOXENV == py27
+    condition: "$TOXENV == py27"
     tags: true
     all_branches: true
     repo: andyortlieb/spasm
+  password:
+    secure: DqsPv3CE4X2+CtRUTT4iGxiRcO0q8g6YrkPYZWYQSmPgdOe0UwrE9IMh9cKrDNj7NOhKAv2ft8I1DZn2uE1FpMEBJSJJb5UY8UqXoasW/3LQB4XBnlEq6LaMueI2BoToVQup1uM9Qe8lljSGsFI/qguhW4XgqWu05p45q0VTu2ATULe14uavk2CAW8wI+v8qmS1jQgnLCCfmE3NuWEvlhI56EWTJRTN6A0bL7XybFnR/2xw2ojYOAAVi60Ix/FB2a0Dut3XX6plwHaeOqi7UR9XHUqr7iJIl6vXafoxZKpD4zWf39LNZz/f467hMxvHDcmIqYricE8z+gphn8HGfVvDWU04d5QqMUgkTMmI0+1bqzAXO22ZxD9Lc63ccyJhkx4V2vQ5UarSuTgyYQ03O7qYCwyxfkne5hxKIUs8iCEmSUZ9/RitsxFDvk8MolAmAS1GqzRGpDbJSNq5nuicI8wuHQRNXeBAHTM8yR2LKcXIUtdehE7cNsbUwrQqRnFZ/8xwv4TIHoa4ur8iqloHSZIGgMBQlexUhAAagkhIfvXrruOh1Xu9rfXvBNY0Q161DGZPCrO1FsWSIijnfkAcZOSMnUdaXTT3SLIp4yhyKNPT9t8ZIeIESNAiUdNuOeqPHud7Ynb6oI8cnveGorLbl17NPJvLUWg2DTL6ogtXQsCg=
