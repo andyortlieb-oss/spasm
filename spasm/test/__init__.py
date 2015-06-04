@@ -33,7 +33,6 @@ def test():
         sm.set("end")
         sm.set("beginning")
 
-
     sm1 = StateMachine(allowLog=True, initialState='beginning')
     prepareRules(sm1)
     circularFlow(sm1)
@@ -51,11 +50,10 @@ def test():
 
     try:
         sm3.set("beginning")
-    except ErroneousTransition, e:
+    except ErroneousTransition:
         testlog.info("Appropriate exception was raised")
     else:
         raise AssertionError("beginning->beginning should have raised ErroneousTransition")
-
 
     # Test that delete rule works
     sm4 = StateMachine(allowLog=True, initialState='beginning', voidcb=DeniedTransition)
@@ -65,7 +63,7 @@ def test():
     sm4.deleteRule('end', 'beginning')
     try:
         circularFlow(sm4)
-    except DeniedTransition, e:
+    except DeniedTransition:
         testlog.info("Good. DeniedTransition found when doing circularflow the third time.")
     else:
         raise AssertionError("circularFlow should have raised DeniedTransition.")
@@ -88,11 +86,11 @@ def test():
             return False
 
         def my_allow(self, sm, fro, to):
-            testlog.info("   ACCEPTED! %s ->  %s"% (fro, to))
+            testlog.info("   ACCEPTED! %s ->  %s" % (fro, to))
 
         def my_deny(self, sm, fro, to):
             testlog.info(" ____ DENIED ____ %s -> %s " % (fro, to))
-            return ErroneousTransition # It's okay to return a TransitionException, it will get raised in a uniform way.
+            return ErroneousTransition  # It's okay to return a TransitionException, it will get raised in a uniform way.
 
         def my_void(self, sm, fro, to):
             testlog.info(" ____ VOID ____ %s -> %s " % (fro, to))
@@ -104,10 +102,10 @@ def test():
         voidcb = my_void
 
         def setup(self):
-            self.allow("beginning", "middle") # ok.
-            self.allow("middle", "end") # ok.
-            self.ignore("beginning", "end") # Cannot skip.
-            self.deny("end", "beginning") # cannot loop.
+            self.allow("beginning", "middle")  # ok.
+            self.allow("middle", "end")  # ok.
+            self.ignore("beginning", "end")  # Cannot skip.
+            self.deny("end", "beginning")  # cannot loop.
 
     sm5 = NeatoStateMachine()
     # ignored: beginning->end
@@ -131,7 +129,6 @@ def test():
     else:
         raise AssertionError("ErroneousTransition was expected")
 
-
     sm6 = NeatoStateMachine()
     # This one uses the Stop sentinel
     sm6.allow("middle", "end", Stop)
@@ -143,7 +140,6 @@ def test():
     else:
         raise AssertionError("Stop sentinel expected")
 
-
     sm7 = StateMachine(allowLog=True, initialState='beginning')
     sm7.deny('end', 'beginning')
     sm7.step('beginning', 'middle')
@@ -151,9 +147,9 @@ def test():
     sm7.step('end', 'beginning')
 
     sm7.next()
-    assert(sm7.get()=='middle')
+    assert(sm7.get() == 'middle')
     sm7.next()
-    assert(sm7.get()=='end')
+    assert(sm7.get() == 'end')
     try:
         sm7.next()
     except DeniedTransition:
@@ -163,25 +159,25 @@ def test():
 
     testlog.info("attempting to cycle")
     sm7.step("end", "beginning", AllowTransition)
-    assert(sm7.next()=='beginning')
+    assert(sm7.next() == 'beginning')
 
     # start really shaking things up
     sm7.ignore('beginning', 'middle')
-    assert(sm7.next()=='beginning')
+    assert(sm7.next() == 'beginning')
     sm7.step('beginning', 'middle', AllowTransition)
-    assert(sm7.next()=='middle')
+    assert(sm7.next() == 'middle')
 
-    sm7.next(); sm7.next(); sm7.next(); sm7.next()
+    for x in xrange(0, 4):
+        sm7.next()
 
-    sm7.step("end", "afterlife", lambda a,b,c: True)
+    sm7.step("end", "afterlife", lambda a, b, c: True)
     sm7.allow("afterlife", "reincarnation", step=True)
     sm7.step("reincarnation", "beginning")
-
 
     start = len(sm7._transitionLog)
     for x in range(15):
         sm7.next()
-    assert( (len(sm7._transitionLog)-start) == 15)
+    assert((len(sm7._transitionLog)-start) == 15)
 
 ###############################################################################
 # Here's just a rundown of what we did during the test.
@@ -193,8 +189,7 @@ def test():
         print "State Machine Transition Log: %s" % sm
         pprint.pprint(sm._transitionLog)
 
-
     return allsm
 
-if __name__=='__main__':
+if __name__ == '__main__':
     test()

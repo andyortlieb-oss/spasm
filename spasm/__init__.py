@@ -24,9 +24,11 @@ class ErroneousTransition(TransitionException):
 class DeniedTransition(TransitionException):
     pass
 
+
 class Stop(Exception):
     # Used for flow control, raises after a successful transition.
     pass
+
 
 def IgnoreTransition(*args, **kwargs):
     return False
@@ -41,9 +43,12 @@ def AllowTransition(*args, **kwargs):
 class State(object):
     pass
 
+
 class _Initializing(State):
     pass
+
 initializing = _Initializing()
+
 
 class Unset(State):
     pass
@@ -135,7 +140,6 @@ class StateMachine(object):
     def deny(self, fro, to, callback=None, step=False):
         callback = callback or self.denycb
         self.rule(fro, to, callback, step)
-
 
     def set(self, to):
         fro = self.get()
