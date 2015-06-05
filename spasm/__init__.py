@@ -4,7 +4,7 @@
 
 import datetime
 import logging
-logger = logging.getLogger("spasm")
+LOGGER = logging.getLogger("spasm")
 
 
 # Some provided callbacks
@@ -52,7 +52,6 @@ initializing = _Initializing()
 
 class Unset(State):
     pass
-unset = Unset()
 
 
 class LoggedTransition(object):
@@ -72,50 +71,56 @@ class LoggedTransition(object):
 
 class StateMachine(object):
     _current = Unset()
-    allowLog = None
+    allow_log = None
 
-    voidcb = IgnoreTransition
-    allowcb = AllowTransition
-    ignorecb = IgnoreTransition
-    denycb = DeniedTransition
+    void_cb = IgnoreTransition
+    allow_cb = AllowTransition
+    ignore_cb = IgnoreTransition
+    deny_cb = DeniedTransition
 
-    initialState = initializing
+    initial_state = initializing
 
     def setup(self):
         pass
 
-    def __init__(self, initialState=None,
-                 voidcb=None, allowcb=None, ignorecb=None, denycb=None,
-                 allowLog=None):
+    def __init__(self, initial_state=None,
+                 void_cb=None, allow_cb=None, ignore_cb=None, deny_cb=None,
+                 allow_log=None):
 
-        self._transitionLog = []
+        self._transition_log = []
         self._rules = {}
         self._steps = {}
 
-        self.initialState = initialState or self.initialState
-        self.voidcb = voidcb or self.voidcb
-        self.allowcb = allowcb or self.allowcb
-        self.ignorecb = ignorecb or self.ignorecb
-        self.denycb = denycb or self.denycb
-        self.allowLog = allowLog if (allowLog is not None) else self.allowLog
+        self.initial_state = initial_state or self.initial_state
+        self.void_cb = void_cb or self.void_cb
+        self.allow_cb = allow_cb or self.allow_cb
+        self.ignore_cb = ignore_cb or self.ignore_cb
+        self.deny_cb = deny_cb or self.deny_cb
+        self.allow_log = allow_log if (allow_log is not None) else self.allow_log
 
         self.setup()
-        self._current = self.initialState
+        self._current = self.initial_state
 
     # Add an automatic step
     def step(self, fro, to, callback=None):
         if fro in self._steps:
-            logger.warn("StateMachine.step() will replace %s->%s with %s-%s", fro, self._steps[fro], fro, to)
+            LOGGER.warn(
+                "StateMachine.step() will replace %s->%s with %s-%s",
+                fro, self._steps[fro], fro, to)
 
         self._steps[fro] = to
 
         if callback:
             if (fro, to) in self._rules:
-                logger.warn("StateMachine.step() will override an existing rule for %s->%s", fro, to)
+                LOGGER.warn(
+                    "StateMachine.step() will override an existing rule for %s->%s",
+                    fro, to)
             self.rule(fro, to, callback)
         else:
             if (fro, to) not in self._rules:
-                logger.info("StateMachine.step() will automatically add an allow rule for %s->%s", fro, to)
+                LOGGER.info(
+                    "StateMachine.step() will automatically add an allow rule for %s->%s",
+                    fro, to)
                 self.allow(fro, to)
 
     # Add or update a transition rule
@@ -130,15 +135,15 @@ class StateMachine(object):
 
     # allow,ignore,deny are shortcuts
     def allow(self, fro, to, callback=None, step=False):
-        callback = callback or self.allowcb
+        callback = callback or self.allow_cb
         self.rule(fro, to, callback, step)
 
     def ignore(self, fro, to, callback=None, step=False):
-        callback = callback or self.ignorecb
+        callback = callback or self.ignore_cb
         self.rule(fro, to, callback, step)
 
     def deny(self, fro, to, callback=None, step=False):
-        callback = callback or self.denycb
+        callback = callback or self.deny_cb
         self.rule(fro, to, callback, step)
 
     def set(self, to):
@@ -146,12 +151,12 @@ class StateMachine(object):
 
         cb = self._rules.get(
             (fro, to),
-            self.voidcb
+            self.void_cb
         )
 
-        if self.allowLog:
+        if self.allow_log:
             logged = LoggedTransition(self, fro, to)
-            self._transitionLog.append(logged)
+            self._transition_log.append(logged)
 
         if isinstance(cb, type) and issubclass(cb, TransitionException):
             raise cb("%s -> %s" % (fro, to))
@@ -166,7 +171,7 @@ class StateMachine(object):
         if result is not False:
             self._current = to
 
-        if result is not False and self.allowLog:
+        if result is not False and self.allow_log:
             logged.success = True
 
         if isinstance(result, type) and issubclass(result, Stop):
