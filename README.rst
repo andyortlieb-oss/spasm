@@ -1,7 +1,5 @@
-Spasm |Version| |Build| |Coverage| |Health|
+Spasm |Build| |Coverage| |Health|
 ===================================================================
-
-|Compatibility| |Implementations| |Format| |Downloads|
 
 SPASM - Spasm Passes As a StateMachine
 
@@ -41,13 +39,3 @@ Changelog
    :target: https://coveralls.io/r/andyortlieb/spasm
 .. |Health| image:: https://landscape.io/github/andyortlieb/spasm/master/landscape.svg
    :target: https://landscape.io/github/andyortlieb/spasm/master
-.. |Version| image:: https://pypip.in/version/spasm/badge.svg?text=version
-   :target: https://pypi.python.org/pypi/spasm
-.. |Downloads| image:: https://pypip.in/download/spasm/badge.svg
-   :target: https://pypi.python.org/pypi/spasm
-.. |Compatibility| image:: https://pypip.in/py_versions/spasm/badge.svg
-   :target: https://pypi.python.org/pypi/spasm
-.. |Implementations| image:: https://pypip.in/implementation/spasm/badge.svg
-   :target: https://pypi.python.org/pypi/spasm
-.. |Format| image:: https://pypip.in/format/spasm/badge.svg
-   :target: https://pypi.python.org/pypi/spasm
